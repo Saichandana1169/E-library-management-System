@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fine Payment</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+        }
+
+        /* NAVBAR */
+
+        .navbar{
+            background:#1e293b;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .logo{
+            color:white;
+            font-size:24px;
+            font-weight:bold;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:20px;
+        }
+
+        .nav-links a{
+            color:white;
+            text-decoration:none;
+        }
+
+        .nav-links a:hover{
+            color:#38bdf8;
+        }
+
+        /* PAGE */
+
+        .container{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:80vh;
+        }
+
+        .fine-card{
+            background:white;
+            width:450px;
+            padding:40px;
+            border-radius:15px;
+            text-align:center;
+            box-shadow:0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .fine-card h2{
+            color:#1e293b;
+            margin-bottom:20px;
+        }
+
+        .fine-amount{
+            font-size:40px;
+            font-weight:bold;
+            color:#dc2626;
+            margin-bottom:30px;
+        }
+
+        .btn{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:8px;
+            background:#16a34a;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        .btn:hover{
+            background:#15803d;
+        }
+
+        .note{
+            margin-top:20px;
+            color:#666;
+            font-size:14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Student Portal
+    </div>
+
+    <div class="nav-links">
+
+        <a th:href="@{/student/home}">
+            Home
+        </a>
+
+        <a th:href="@{/student/books}">
+            My Books
+        </a>
+
+        <a th:href="@{/student/fine}">
+            Fine
+        </a>
+
+        <a th:href="@{/logout}"
+           th:if="${session.studentId != null}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+<!-- FINE CARD -->
+
+<div class="container">
+
+    <div class="fine-card">
+
+        <h2>Total Fine Amount</h2>
+
+        <div class="fine-amount">
+            ₹<span th:text="${totalFine}">0</span>
+        </div>
+
+        <form th:action="@{/fine/pay}"
+              method="post">
+
+            <button type="submit"
+                    class="btn">
+                Pay Fine
+            </button>
+
+        </form>
+
+        <div class="note">
+
+            Fine Rule:
+            ₹10 per day after the due date.
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

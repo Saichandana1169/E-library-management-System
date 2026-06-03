@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Explore Books</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+        }
+
+        /* NAVBAR */
+
+        .navbar{
+            background:#1e293b;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .logo{
+            color:white;
+            font-size:24px;
+            font-weight:bold;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:20px;
+        }
+
+        .nav-links a{
+            color:white;
+            text-decoration:none;
+        }
+
+        .nav-links a:hover{
+            color:#38bdf8;
+        }
+
+        /* PAGE */
+
+        .container{
+            padding:40px;
+        }
+
+        .title{
+            margin-bottom:30px;
+            color:#1e293b;
+        }
+
+        .book-grid{
+            display:grid;
+            grid-template-columns:
+            repeat(auto-fill,minmax(250px,1fr));
+            gap:25px;
+        }
+
+        .book-card{
+            background:white;
+            border-radius:12px;
+            padding:20px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .book-card h3{
+            color:#1e293b;
+            margin-bottom:10px;
+        }
+
+        .stock{
+            margin-bottom:20px;
+            color:#555;
+            font-weight:bold;
+        }
+
+        .btn-group{
+            display:flex;
+            gap:10px;
+        }
+
+        button{
+            flex:1;
+            padding:10px;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+            color:white;
+        }
+
+        .issue-btn{
+            background:#22c55e;
+        }
+
+        .return-btn{
+            background:#ef4444;
+        }
+
+        .issue-btn:hover{
+            background:#16a34a;
+        }
+
+        .return-btn:hover{
+            background:#dc2626;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        E-Library Admin
+    </div>
+
+    <div class="nav-links">
+
+        <a th:href="@{/admin/home}">
+            Home
+        </a>
+
+        <a th:href="@{/admin/explore}">
+            Explore Books
+        </a>
+
+        <a th:href="@{/admin/register}">
+            Register Student
+        </a>
+
+        <a th:href="@{/admin/add-book}">
+            Add Book
+        </a>
+
+        <a th:href="@{/logout}"
+           th:if="${session.admin != null}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+<div class="container">
+
+    <h1 class="title">
+        Library Books
+    </h1>
+
+    <div class="book-grid">
+
+        <div class="book-card"
+             th:each="book : ${books}">
+
+            <h3 th:text="${book.bookName}">
+                Book Name
+            </h3>
+
+            <div class="stock">
+                Stock :
+                <span th:text="${book.stock}">
+                    10
+                </span>
+            </div>
+
+            <div class="btn-group">
+
+                <!-- ISSUE BOOK -->
+
+                <button class="issue-btn"
+                        th:onclick="'issueBook(' + ${book.bookId} + ')'">
+                    Issue
+                </button>
+
+                <!-- RETURN BOOK -->
+
+                <button class="return-btn"
+                        th:onclick="'returnBook(' + ${book.bookId} + ')'">
+                    Return
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    function issueBook(bookId){
+
+        let studentId =
+            prompt("Enter Student ID");
+
+        if(studentId==null ||
+            studentId===""){
+            return;
+        }
+
+        let form =
+            document.createElement("form");
+
+        form.method="POST";
+        form.action="/admin/issue";
+
+        let sid =
+            document.createElement("input");
+
+        sid.type="hidden";
+        sid.name="studentId";
+        sid.value=studentId;
+
+        let bid =
+            document.createElement("input");
+
+        bid.type="hidden";
+        bid.name="bookId";
+        bid.value=bookId;
+
+        form.appendChild(sid);
+        form.appendChild(bid);
+
+        document.body.appendChild(form);
+
+        form.submit();
+    }
+
+    function returnBook(bookId){
+
+        let studentId = prompt("Enter Student ID");
+
+        if(studentId==null || studentId===""){
+            return;
+        }
+
+        let form=document.createElement("form");
+        form.method="POST";
+        form.action="/admin/return";
+
+        let sid=document.createElement("input");
+        sid.type="hidden";
+        sid.name="studentId";
+        sid.value=studentId;
+
+        let bid=document.createElement("input");
+        bid.type="hidden";
+        bid.name="bookId";
+        bid.value=bookId;
+
+        form.appendChild(sid);
+        form.appendChild(bid);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+</script>
+
+</body>
+</html>

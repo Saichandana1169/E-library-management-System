@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Books</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+        }
+
+        /* NAVBAR */
+
+        .navbar{
+            background:#1e293b;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .logo{
+            color:white;
+            font-size:24px;
+            font-weight:bold;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:20px;
+        }
+
+        .nav-links a{
+            color:white;
+            text-decoration:none;
+        }
+
+        .nav-links a:hover{
+            color:#38bdf8;
+        }
+
+        /* PAGE */
+
+        .container{
+            padding:40px;
+        }
+
+        .heading{
+            margin-bottom:25px;
+            color:#1e293b;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+            border-radius:10px;
+            overflow:hidden;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th{
+            background:#2563eb;
+            color:white;
+            padding:15px;
+        }
+
+        td{
+            padding:15px;
+            text-align:center;
+            border-bottom:1px solid #ddd;
+        }
+
+        tr:hover{
+            background:#f8fafc;
+        }
+
+        .issued{
+            color:green;
+            font-weight:bold;
+        }
+
+        .returned{
+            color:red;
+            font-weight:bold;
+        }
+
+        .fine{
+            color:#dc2626;
+            font-weight:bold;
+        }
+
+        .no-books{
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            text-align:center;
+            margin-top:20px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Student Portal
+    </div>
+
+    <div class="nav-links">
+
+        <a th:href="@{/student/home}">
+            Home
+        </a>
+
+        <a th:href="@{/student/books}">
+            My Books
+        </a>
+
+        <a th:href="@{/student/fine}">
+            Fine
+        </a>
+
+        <a th:href="@{/logout}"
+           th:if="${session.studentId != null}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+<!-- BOOKS TABLE -->
+
+<div class="container">
+
+    <h1 class="heading">
+        My Issued & Returned Books
+    </h1>
+
+    <div th:if="${#lists.isEmpty(books)}"
+         class="no-books">
+
+        No Books Found
+
+    </div>
+
+    <table th:if="${!#lists.isEmpty(books)}">
+
+        <thead>
+
+        <tr>
+
+            <th>Book Name</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Fine</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:each="book : ${books}">
+
+            <td th:text="${book.bookName}">
+                Java
+            </td>
+
+            <td th:text="${book.issueDate}">
+                2025-01-01
+            </td>
+
+            <td th:text="${book.dueDate}">
+                2025-01-03
+            </td>
+
+            <td th:text="${book.returnDate}">
+                --
+            </td>
+
+            <td>
+
+                <span
+                        th:if="${book.status == 'ISSUED'}"
+                        class="issued">
+
+                    ISSUED
+
+                </span>
+
+                <span
+                        th:if="${book.status == 'RETURNED'}"
+                        class="returned">
+
+                    RETURNED
+
+                </span>
+
+            </td>
+
+            <td class="fine">
+
+                ₹<span th:text="${book.fine}">
+                    0
+                </span>
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>
